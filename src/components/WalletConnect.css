@@ -1,0 +1,408 @@
+.wallet-connect {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1.5rem 3rem;
+  background: linear-gradient(135deg, #0a0a1e 0%, #0f1729 50%, #0a0a1e 100%);
+  border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-connect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.1), transparent);
+  animation: shine 3s infinite;
+}
+
+/* 自定义连接按钮 */
+.custom-connect-button {
+  position: relative;
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%);
+  border: 2px solid transparent;
+  border-radius: 50px;
+  color: #fbbf24;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow:
+    0 0 20px rgba(220, 38, 38, 0.4),
+    0 0 40px rgba(251, 191, 36, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+}
+
+.custom-connect-button::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #fbbf24, #dc2626, #3b82f6, #fbbf24);
+  background-size: 400%;
+  border-radius: 50px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+  animation: gradientRotate 3s linear infinite;
+}
+
+.custom-connect-button:hover::before {
+  opacity: 1;
+}
+
+.custom-connect-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow:
+    0 5px 30px rgba(220, 38, 38, 0.6),
+    0 0 60px rgba(251, 191, 36, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.custom-connect-button:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.button-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.custom-connect-button:hover .button-glow {
+  opacity: 1;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.button-icon {
+  font-size: 1.3rem;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8));
+  animation: floatIcon 3s ease-in-out infinite;
+}
+
+.button-text {
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.button-bg-animation {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.custom-connect-button:hover .button-bg-animation {
+  left: 100%;
+}
+
+/* 错误网络按钮 */
+.custom-connect-button.wrong-network {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  animation: shake 0.5s ease infinite;
+}
+
+/* 已连接状态 */
+.connected-wallet {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* 链按钮 */
+.chain-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
+  border: 2px solid rgba(251, 191, 36, 0.4);
+  border-radius: 50px;
+  color: #fde68a;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.chain-button:hover {
+  border-color: #fbbf24;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.chain-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.chain-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.chain-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chain-name {
+  font-size: 0.9rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 账户按钮 */
+.account-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border: 2px solid transparent;
+  border-radius: 50px;
+  color: #fef3c7;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  box-shadow:
+    0 4px 15px rgba(220, 38, 38, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.account-button::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #fbbf24, #dc2626, #3b82f6, #fbbf24);
+  background-size: 400%;
+  border-radius: 50px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+  animation: gradientRotate 4s linear infinite;
+}
+
+.account-button:hover::before {
+  opacity: 1;
+}
+
+.account-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 6px 25px rgba(220, 38, 38, 0.6),
+    0 0 30px rgba(251, 191, 36, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.account-icon {
+  font-size: 1.2rem;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.6));
+}
+
+.account-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(251, 191, 36, 0.6);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.account-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.account-button:hover .account-avatar {
+  border-color: #fbbf24;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.8);
+  transform: scale(1.1);
+}
+
+.account-address {
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.account-balance {
+  padding: 0.25rem 0.75rem;
+  background: rgba(251, 191, 36, 0.2);
+  border-radius: 20px;
+  color: #fbbf24;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+}
+
+/* 动画 */
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes gradientRotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes floatIcon {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .wallet-connect {
+    padding: 1rem 1rem;
+  }
+
+  .custom-connect-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .connected-wallet {
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+  }
+
+  .chain-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    gap: 0.35rem;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .account-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    gap: 0.4rem;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .chain-name {
+    font-size: 0.75rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .account-address {
+    font-size: 0.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .account-balance {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .chain-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .account-avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .account-icon {
+    font-size: 1rem;
+  }
+
+  .button-icon {
+    font-size: 1.1rem;
+  }
+}
