@@ -1,4 +1,6 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useBalance } from 'wagmi';
+import { formatEther } from 'viem';
 import './WalletConnect.css';
 
 export function WalletConnect() {
@@ -20,6 +22,20 @@ export function WalletConnect() {
             account &&
             chain &&
             (!authenticationStatus || authenticationStatus === 'authenticated');
+
+          // 使用 useBalance 获取余额，支持自动刷新
+          const { data: balance } = useBalance({
+            address: account?.address as `0x${string}`,
+            query: {
+              enabled: !!account?.address,
+              refetchInterval: 1500, // 每5秒自动刷新
+            },
+          });
+
+          // 格式化余额显示
+          const displayBalance = balance
+            ? `${parseFloat(formatEther(balance.value)).toFixed(4)} ${balance.symbol}`
+            : account?.displayBalance;
 
           return (
             <div
@@ -90,8 +106,8 @@ export function WalletConnect() {
                         <span className="account-icon">👤</span>
                       )}
                       <span className="account-address">{account.displayName}</span>
-                      {account.displayBalance && (
-                        <span className="account-balance">{account.displayBalance}</span>
+                      {displayBalance && (
+                        <span className="account-balance">{displayBalance}</span>
                       )}
                     </button>
                   </div>

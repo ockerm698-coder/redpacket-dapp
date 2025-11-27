@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useWriteContract, useWaitForTransactionReceipt, useChainId } from 'wagmi';
-import { parseEther } from 'viem';
+import { useState, useEffect } from 'react';
+import { useWriteContract, useWaitForTransactionReceipt, useChainId, useAccount } from 'wagmi';
+import { parseEther, decodeEventLog } from 'viem';
 import { RED_PACKET_ABI, getRedPacketAddress } from '../contracts/RedPacketABI';
 import './CreateRedPacket.css';
 
@@ -8,14 +8,52 @@ export function CreateRedPacket() {
   const [amount, setAmount] = useState('');
   const [count, setCount] = useState('');
   const [isRandom, setIsRandom] = useState(false);
+  const [redPacketId, setRedPacketId] = useState<string | null>(null);
   const chainId = useChainId();
+  const { address } = useAccount();
 
   const { data: hash, isPending, writeContract } = useWriteContract();
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+  const { data: receipt, isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
     });
+
+  // 从交易回执的事件日志中解析红包ID
+  useEffect(() => {
+    if (isConfirmed && receipt && address) {
+      try {
+        // 遍历所有日志，找到属于当前用户的 Created 事件
+        for (const log of receipt.logs) {
+          try {
+            const decoded = decodeEventLog({
+              abi: RED_PACKET_ABI,
+              data: log.data,
+              topics: log.topics,
+            });
+
+            // 找到 Created 事件，并且 creator 是当前用户
+            if (decoded.eventName === 'Created') {
+              const creator = decoded.args.creator;
+              const packetId = decoded.args.id;
+
+              // 确保是当前用户创建的红包（地址不区分大小写）
+              if (creator?.toLowerCase() === address.toLowerCase() && packetId) {
+                setRedPacketId(packetId.toString());
+                console.log('红包创建成功，ID:', packetId.toString());
+                break;
+              }
+            }
+          } catch {
+            // 跳过无法解码的日志
+            continue;
+          }
+        }
+      } catch (error) {
+        console.error('解析红包ID失败:', error);
+      }
+    }
+  }, [isConfirmed, receipt, address]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,9 +135,23 @@ export function CreateRedPacket() {
                 : '发红包'}
             </button>
 
-            {isConfirmed && (
+            {isConfirmed && redPacketId && (
               <div className="success-message">
-                ✅ 红包发送成功！
+                <div>✅ 红包创建成功！</div>
+                <div className="red-packet-id">
+                  <span>红包ID：</span>
+                  <span className="id-value">{redPacketId}</span>
+                  <button
+                    type="button"
+                    className="copy-id-btn"
+                    onClick={() => {
+                      navigator.clipboard.writeText(redPacketId);
+                      alert('红包ID已复制到剪贴板');
+                    }}
+                  >
+                    复制
+                  </button>
+                </div>
               </div>
             )}
           </form>

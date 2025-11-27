@@ -1,12 +1,17 @@
 .wallet-connect {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 1.5rem 3rem;
-  background: linear-gradient(135deg, #0a0a1e 0%, #0f1729 50%, #0a0a1e 100%);
-  border-bottom: 1px solid rgba(251, 191, 36, 0.2);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  position: relative;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, rgba(10, 10, 30, 0.95) 0%, rgba(15, 23, 41, 0.95) 50%, rgba(10, 10, 30, 0.95) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 50px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
 
@@ -340,7 +345,10 @@
 /* 响应式设计 */
 @media (max-width: 768px) {
   .wallet-connect {
-    padding: 1rem 1rem;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 40px;
   }
 
   .custom-connect-button {
