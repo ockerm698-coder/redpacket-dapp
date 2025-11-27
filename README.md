@@ -179,7 +179,7 @@ wrangler pages deploy dist --project-name=redpacket-dapp
 
 ### 智能合约
 - **RedPacket.sol**: 红包核心逻辑合约
-  - **Sepolia 测试网**: `0x2e9a6f87A12797F6b97ae0b901b5871EE575AE8f`
+  - **Sepolia 测试网**: `0x681ddD24197358474BDD541d51a6424Ea5EcC494`
   - **Ethereum 主网**: 待部署
   - 支持等额和随机红包
   - 基于事件的历史记录查询
